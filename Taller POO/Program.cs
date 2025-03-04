@@ -9,7 +9,15 @@ namespace Taller_POO
     // Clase base abstracta Node
     public abstract class Node
     {
-        public abstract bool Execute();
+        protected List<Node> children = new List<Node>();
+
+        public void AddChild(Node child)
+        {
+             children.Add(child);
+        }
+    }
+
+    public abstract bool Execute();
     }
 
     // Clase Composite (para nodos que contienen hijos)
