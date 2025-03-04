@@ -1,0 +1,14 @@
+C:\Users\david\source\repos\Taller POO\bin\Debug\net8.0\Taller POO.exe
+C:\Users\david\source\repos\Taller POO\bin\Debug\net8.0\Taller POO.deps.json
+C:\Users\david\source\repos\Taller POO\bin\Debug\net8.0\Taller POO.runtimeconfig.json
+C:\Users\david\source\repos\Taller POO\bin\Debug\net8.0\Taller POO.dll
+C:\Users\david\source\repos\Taller POO\bin\Debug\net8.0\Taller POO.pdb
+C:\Users\david\source\repos\Taller POO\obj\Debug\net8.0\Taller POO.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\david\source\repos\Taller POO\obj\Debug\net8.0\Taller POO.AssemblyInfoInputs.cache
+C:\Users\david\source\repos\Taller POO\obj\Debug\net8.0\Taller POO.AssemblyInfo.cs
+C:\Users\david\source\repos\Taller POO\obj\Debug\net8.0\Taller POO.csproj.CoreCompileInputs.cache
+C:\Users\david\source\repos\Taller POO\obj\Debug\net8.0\Taller POO.dll
+C:\Users\david\source\repos\Taller POO\obj\Debug\net8.0\refint\Taller POO.dll
+C:\Users\david\source\repos\Taller POO\obj\Debug\net8.0\Taller POO.pdb
+C:\Users\david\source\repos\Taller POO\obj\Debug\net8.0\Taller POO.genruntimeconfig.cache
+C:\Users\david\source\repos\Taller POO\obj\Debug\net8.0\ref\Taller POO.dll
