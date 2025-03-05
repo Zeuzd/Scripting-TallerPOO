@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Threading;  
 
 namespace Taller_POO
 {
-    
     public abstract class Node
     {
         protected List<Node> children = new List<Node>();
@@ -16,10 +16,8 @@ namespace Taller_POO
         public abstract bool Execute();
     }
 
-    
     public abstract class Composite : Node { }
 
-    
     public class Selector : Composite
     {
         public override bool Execute()
@@ -32,7 +30,6 @@ namespace Taller_POO
         }
     }
 
-    
     public class Sequence : Composite
     {
         public override bool Execute()
@@ -45,11 +42,13 @@ namespace Taller_POO
         }
     }
 
-    
     public class CheckDistanceTask : Node
     {
         private float objectDistance;
         private float validDistance;
+
+        public float ObjectDistance => objectDistance;
+        public float ValidDistance => validDistance;
 
         public CheckDistanceTask(float objDist, float validDist)
         {
@@ -61,50 +60,60 @@ namespace Taller_POO
         {
             if (objectDistance <= validDistance)
             {
-                Console.WriteLine(" Objeto dentro de la distancia válida.");
+                Console.WriteLine("Objeto dentro de la distancia válida.");
                 return true;
             }
-            Console.WriteLine(" Objeto fuera de la distancia válida.");
+            Console.WriteLine("Objeto fuera de la distancia válida.");
             return false;
         }
     }
 
     public class MoveToTargetTask : Node
     {
+        private CheckDistanceTask checkDistanceTask;
         private float position;
-        private float targetPosition;
         private float stepSize;
 
-        public MoveToTargetTask(float startPosition, float target, float step = 1.0f)
+        public MoveToTargetTask(CheckDistanceTask checkDistance, float step = 1.0f)
         {
-            position = startPosition;
-            targetPosition = target;
+            checkDistanceTask = checkDistance;
+            position = checkDistanceTask.ObjectDistance;
             stepSize = step;
         }
 
         public override bool Execute()
         {
-            Console.WriteLine(" Iniciando movimiento hacia el objetivo...");
+            float targetPosition = checkDistanceTask.ValidDistance;
+
+            Console.WriteLine("Iniciando movimiento hacia el objetivo...");
 
             while (position < targetPosition)
             {
                 position += stepSize;
                 if (position > targetPosition) position = targetPosition;
 
-                Console.WriteLine($" Posición actual: {position}");
-                System.Threading.Thread.Sleep(500); 
+                Console.WriteLine($"Posición actual: {position}");
+                Thread.Sleep(500); 
             }
 
-            Console.WriteLine(" Objetivo alcanzado.");
+            Console.WriteLine("Objetivo alcanzado.");
             return true;
         }
     }
 
     public class WaitTask : Node
     {
+        private int waitTime;
+
+        public WaitTask(int time)
+        {
+            waitTime = time;
+        }
+
         public override bool Execute()
         {
-            Console.WriteLine(" Esperando...");
+            Console.WriteLine($" Esperando {waitTime / 1000} segundos...");
+            Thread.Sleep(waitTime);
             return true;
         }
     }
@@ -113,29 +122,38 @@ namespace Taller_POO
     {
         static void Main()
         {
-            // Crear nodos
             Sequence root = new Sequence();
 
             Selector selector = new Selector();
             Sequence moveSequence = new Sequence();
+            Selector nonEvaluatingSelector = new Selector(); 
 
-            CheckDistanceTask checkDistance = new CheckDistanceTask(1.0f, 4.0f);
-            MoveToTargetTask moveToTarget = new MoveToTargetTask(1.0f, 4.0f, 0.5f);
-            WaitTask wait = new WaitTask();
+            int tiempoEspera = 2000;  
 
-            // Configurar el árbol de comportamiento
+            CheckDistanceTask checkDistance = new CheckDistanceTask(3.0f, 16.0f);
+            MoveToTargetTask moveToTarget = new MoveToTargetTask(checkDistance, 0.5f);
+            WaitTask wait = new WaitTask(tiempoEspera);
+
             moveSequence.AddChild(checkDistance);
             moveSequence.AddChild(moveToTarget);
 
             selector.AddChild(moveSequence);
-            selector.AddChild(wait);  // Si la distancia no es válida, espera
+            selector.AddChild(wait);  
 
-            root.AddChild(selector);
+            nonEvaluatingSelector.AddChild(selector);
 
-            // Ejecutar comportamiento
-            Console.WriteLine(" Ejecutando Árbol de Comportamiento:");
-            root.Execute();
+            Sequence mainSequence = new Sequence();
+            mainSequence.AddChild(nonEvaluatingSelector);
+            mainSequence.AddChild(wait);
+
+            
+            root.AddChild(mainSequence);
+
+            Console.WriteLine("Ejecutando Árbol de Comportamiento en bucle infinito:");
+            while (true)
+            {
+                root.Execute();
+            }
         }
     }
 }
-
